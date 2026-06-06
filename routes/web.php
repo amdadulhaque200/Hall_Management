@@ -34,6 +34,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
     Route::post('/complaints/{complaint}/reply', [Admin\ComplaintController::class, 'reply'])->name('complaints.reply');
     // Meals
     Route::get('/meals', [\App\Http\Controllers\Admin\MealController::class, 'index'])->name('meals.index');
+
+    // Room Plan
+    Route::get('/room-plan', [\App\Http\Controllers\Admin\RoomPlanController::class, 'index'])->name('room-plan.index');
 });
 
 // Student Routes
@@ -53,6 +56,10 @@ Route::prefix('student')->name('student.')->middleware(['auth', 'role:student'])
 
     // Notices
     Route::get('/notices', [\App\Http\Controllers\Student\NoticeController::class, 'index'])->name('notices.index');
+
+    // Profile
+    Route::get('/profile', [\App\Http\Controllers\Student\ProfileController::class, 'edit'])->name('profile.edit');
+Route::patch('/profile', [\App\Http\Controllers\Student\ProfileController::class, 'update'])->name('profile.update');
 });
 
 require __DIR__.'/auth.php';

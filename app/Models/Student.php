@@ -6,7 +6,7 @@ class Student extends Model
 {
     protected $fillable = [
         'user_id', 'border_number', 'roll_number', 'name',
-        'department', 'session', 'phone', 'room_id'
+        'department', 'session', 'phone', 'room_id', 'photo'
     ];
 
     public function user() { return $this->belongsTo(User::class); }

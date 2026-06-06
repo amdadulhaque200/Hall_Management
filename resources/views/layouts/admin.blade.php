@@ -32,6 +32,9 @@
                 <a href="{{ route('admin.rooms.index') }}" class="nav-link px-3 py-2 {{ request()->routeIs('admin.rooms*') ? 'active' : '' }}">
                     <i class="bi bi-door-open"></i> Rooms
                 </a>
+                <a href="{{ route('admin.room-plan.index') }}" class="nav-link px-3 py-2 {{ request()->routeIs('admin.room-plan*') ? 'active' : '' }}">
+    <i class="bi bi-building"></i> Room Plan
+</a>
                 <a href="{{ route('admin.fees.index') }}" class="nav-link px-3 py-2 {{ request()->routeIs('admin.fees*') ? 'active' : '' }}">
                     <i class="bi bi-cash"></i> Fees
                 </a>

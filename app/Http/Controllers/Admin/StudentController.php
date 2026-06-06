@@ -42,16 +42,29 @@ class StudentController extends Controller
         ]);
         $user->assignRole('student');
 
-        Student::create([
-            'user_id'       => $user->id,
-            'name'          => $request->name,
-            'border_number' => $request->border_number,
-            'roll_number'   => $request->roll_number,
-            'department'    => $request->department,
-            'session'       => $request->session,
-            'phone'         => $request->phone,
-            'room_id'       => $request->room_id,
+        $student = Student::create([
+    'user_id'       => $user->id,
+    'name'          => $request->name,
+    'border_number' => $request->border_number,
+    'roll_number'   => $request->roll_number,
+    'department'    => $request->department,
+    'session'       => $request->session,
+    'phone'         => $request->phone,
+    'room_id'       => $request->room_id,
+]);
+
+// Assign first available seat in the room
+if ($request->room_id) {
+    $seat = \App\Models\Seat::where('room_id', $request->room_id)
+        ->where('status', 'available')
+        ->first();
+    if ($seat) {
+        $seat->update([
+            'student_id' => $student->id,
+            'status'     => 'occupied',
         ]);
+    }
+}
 
         return redirect()->route('admin.students.index')
             ->with('success', 'Student added successfully!');
@@ -82,9 +95,13 @@ class StudentController extends Controller
     }
 
     public function destroy(Student $student)
-    {
-        $student->user->delete();
-        return redirect()->route('admin.students.index')
-            ->with('success', 'Student deleted successfully!');
-    }
+{
+    // Free the seat
+    \App\Models\Seat::where('student_id', $student->id)
+        ->update(['student_id' => null, 'status' => 'available']);
+
+    $student->user->delete();
+    return redirect()->route('admin.students.index')
+        ->with('success', 'Student deleted successfully!');
+}
 }

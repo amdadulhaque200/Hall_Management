@@ -38,6 +38,9 @@
                 <a href="{{ route('student.notices.index') }}" class="nav-link px-3 py-2 {{ request()->routeIs('student.notices*') ? 'active' : '' }}">
     <i class="bi bi-megaphone"></i> Notices
 </a>
+<a href="{{ route('student.profile.edit') }}" class="nav-link px-3 py-2 {{ request()->routeIs('student.profile*') ? 'active' : '' }}">
+    <i class="bi bi-person-gear"></i> My Profile
+</a>
                 <hr class="text-white">
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
