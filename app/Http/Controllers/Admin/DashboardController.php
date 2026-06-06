@@ -32,10 +32,20 @@ class DashboardController extends Controller
                 ->sum('amount');
         }
 
+        // Department wise student count
+$departmentData = Student::selectRaw('department, count(*) as total')
+    ->groupBy('department')
+    ->orderBy('total', 'desc')
+    ->get();
+
+$departmentLabels = $departmentData->pluck('department')->toArray();
+$departmentCounts = $departmentData->pluck('total')->toArray();
+
         return view('admin.dashboard', compact(
-            'totalStudents', 'totalRooms', 'pendingFees',
-            'paidFees', 'pendingComplaints', 'roomLabels',
-            'roomOccupied', 'roomCapacity', 'monthlyFees'
-        ));
+    'totalStudents', 'totalRooms', 'pendingFees',
+    'paidFees', 'pendingComplaints', 'roomLabels',
+    'roomOccupied', 'roomCapacity', 'monthlyFees',
+    'departmentLabels', 'departmentCounts'
+));
     }
 }

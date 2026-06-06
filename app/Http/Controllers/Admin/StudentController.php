@@ -9,12 +9,29 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class StudentController extends Controller
+{public function index(Request $request)
 {
-    public function index()
-    {
-        $students = Student::with('room')->latest()->get();
-        return view('admin.students.index', compact('students'));
+    $query = Student::with('room')->latest();
+
+    if ($request->filled('search')) {
+        $query->where(function($q) use ($request) {
+            $q->where('name', 'like', '%' . $request->search . '%')
+              ->orWhere('border_number', 'like', '%' . $request->search . '%')
+              ->orWhere('roll_number', 'like', '%' . $request->search . '%');
+        });
     }
+
+    if ($request->filled('department')) {
+        $query->where('department', 'like', '%' . $request->department . '%');
+    }
+
+    if ($request->filled('session')) {
+        $query->where('session', 'like', '%' . $request->session . '%');
+    }
+
+    $students = $query->get();
+    return view('admin.students.index', compact('students'));
+}
 
     public function create()
     {

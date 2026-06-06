@@ -81,6 +81,23 @@
     </div>
 </div>
 
+{{-- Department Chart --}}
+<div class="col-md-12">
+    <div class="card shadow-sm">
+        <div class="card-header bg-white fw-bold">
+            <i class="bi bi-bar-chart"></i> Students by Department
+        </div>
+        <div class="card-body">
+            @if(count($departmentLabels) > 0)
+                <canvas id="deptChart" height="80"></canvas>
+            @else
+                <p class="text-center text-muted py-3">No students added yet.</p>
+            @endif
+        </div>
+    </div>
+</div>
+
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     // Fee Status Pie Chart
@@ -153,5 +170,33 @@
             }
         }
     });
+
+    // Department wise student chart
+const deptCtx = document.getElementById('deptChart').getContext('2d');
+new Chart(deptCtx, {
+    type: 'bar',
+    data: {
+        labels: {!! json_encode($departmentLabels) !!},
+        datasets: [{
+            label: 'Students',
+            data: {!! json_encode($departmentCounts) !!},
+            backgroundColor: [
+                '#1a472a','#2c3e50','#3498db',
+                '#e74c3c','#f39c12','#9b59b6',
+                '#1abc9c','#e67e22','#34495e'
+            ],
+            borderRadius: 5
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: { display: false }
+        },
+        scales: {
+            y: { beginAtZero: true, ticks: { stepSize: 1 } }
+        }
+    }
+});
 </script>
 @endsection
